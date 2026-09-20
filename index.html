@@ -3,148 +3,190 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="QOTD Bot — a Discord bot for Question of the Day posts, statistics, logs and server management.">
   <title>QOTD Bot — Discord Question of the Day Bot</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <nav class="nav">
     <div class="nav-inner">
-      <a class="brand" href="index.html">QOTD Bot</a>
+      <a class="brand" href="#home">QOTD Bot</a>
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
+        <a href="#commands" data-i18n="nav_commands">Commands</a>
+        <a href="#setup" data-i18n="nav_setup">Setup</a>
+        <a href="#faq" data-i18n="nav_faq">FAQ</a>
+        <a href="#changelog" data-i18n="nav_changelog">Changelog</a>
+        <a href="terms.html" data-i18n="nav_terms">Terms</a>
+        <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
+        <button class="language-switch" id="languageSwitch" type="button" aria-label="Switch language">🇷🇺 RU</button>
       </div>
     </div>
   </nav>
 
-  <main class="container">
+  <main class="container" id="home">
     <section class="hero">
-      <span class="badge">DISCORD BOT</span>
+      <span class="badge" data-i18n="badge">DISCORD BOT</span>
       <h1>QOTD Bot</h1>
-      <p class="subtitle">A Discord bot for creating, managing, and tracking Question of the Day posts, server statistics, logs, and administrative settings.</p>
-
+      <p class="subtitle" data-i18n="hero_subtitle">A Discord bot for creating, managing, and tracking Question of the Day posts, server statistics, logs, and administrative settings.</p>
       <div class="buttons">
-        <a class="button" href="https://discord.com/oauth2/authorize?client_id=1548745092586676246">Add to Discord</a>
-
-        <a class="button discord-button"
-           href="https://discord.gg/rYqGXWRbfJ"
-           target="_blank"
-           rel="noopener noreferrer">
-          <svg class="discord-logo" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M19.54 4.1A16.7 16.7 0 0 0 15.38 2.8c-.18.32-.38.75-.52 1.09a15.6 15.6 0 0 0-5.72 0A11.8 11.8 0 0 0 8.61 2.8c-1.5.26-2.9.7-4.15 1.3C1.82 8.16 1.11 12.1 1.47 15.98a16.8 16.8 0 0 0 5.1 2.58c.41-.56.77-1.16 1.08-1.8-.59-.22-1.15-.49-1.68-.8.14-.1.27-.2.4-.3 3.24 1.5 6.75 1.5 9.95 0 .13.1.26.2.4.3-.54.31-1.1.58-1.69.8.31.64.67 1.24 1.08 1.8a16.8 16.8 0 0 0 5.1-2.58c.42-4.49-.72-8.39-3.67-11.88ZM8.43 14.72c-.97 0-1.77-.9-1.77-2s.78-2 1.77-2 1.78.9 1.77 2c0 1.1-.79 2-1.77 2Zm7.14 0c-.97 0-1.77-.9-1.77-2s.78-2 1.77-2 1.78.9 1.77 2c0 1.1-.79 2-1.77 2Z"/>
-          </svg>
-          Join our Discord
+        <a class="button" href="https://discord.com/oauth2/authorize?client_id=1548745092586676246" data-i18n="add_discord">Add to Discord</a>
+        <a class="button discord-button" href="https://discord.gg/rYqGXWRbfJ" target="_blank" rel="noopener noreferrer">
+          <svg class="discord-logo" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M19.54 4.1A16.7 16.7 0 0 0 15.38 2.8c-.18.32-.38.75-.52 1.09a15.6 15.6 0 0 0-5.72 0A11.8 11.8 0 0 0 8.61 2.8c-1.5.26-2.9.7-4.15 1.3C1.82 8.16 1.11 12.1 1.47 15.98a16.8 16.8 0 0 0 5.1 2.58c.41-.56.77-1.16 1.08-1.8-.59-.22-1.15-.49-1.68-.8.14-.1.27-.2.4-.3 3.24 1.5 6.75 1.5 9.95 0 .13.1.26.2.4.3-.54.31-1.1.58-1.69.8.31.64.67 1.24 1.08 1.8a16.8 16.8 0 0 0 5.1-2.58c.42-4.49-.72-8.39-3.67-11.88ZM8.43 14.72c-.97 0-1.77-.9-1.77-2s.78-2 1.77-2 1.78.9 1.77 2c0 1.1-.79 2-1.77 2Zm7.14 0c-.97 0-1.77-.9-1.77-2s.78-2 1.77-2 1.78.9 1.77 2c0 1.1-.79 2-1.77 2Z"/></svg>
+          <span data-i18n="join_discord">Join our Discord</span>
         </a>
-
-        <a class="button secondary" href="terms.html">Terms of Service</a>
-        <a class="button secondary" href="privacy.html">Privacy Policy</a>
       </div>
     </section>
 
-    <section class="cards">
-      <div class="card">
-        <h3>Questions of the Day</h3>
-        <p>Create QOTDs with language-specific channels, numbering, role mentions, optional suggestions, and automatic Discord threads. Authorized users can edit or delete existing QOTDs.</p>
+    <section class="status-grid" aria-label="Bot overview">
+      <div class="status-card status-live"><span class="status-dot"></span><div><strong data-i18n="status_title">Bot status</strong><span data-i18n="status_note">Live API status can be connected here.</span></div></div>
+      <div class="stat-card"><strong>16</strong><span data-i18n="commands_count">Commands</span></div>
+      <div class="stat-card"><strong>5</strong><span data-i18n="servers_count">Servers</span></div>
+      <div class="stat-card"><strong>QOTD</strong><span data-i18n="purpose">Question of the Day</span></div>
+    </section>
+
+    <section class="cards feature-cards">
+      <div class="card"><div class="icon">💬</div><h3 data-i18n="feature_qotd_title">Questions of the Day</h3><p data-i18n="feature_qotd_text">Create QOTDs with numbering, role mentions, optional suggestions, and automatic Discord threads.</p></div>
+      <div class="card"><div class="icon">📊</div><h3 data-i18n="feature_stats_title">Statistics &amp; History</h3><p data-i18n="feature_stats_text">View server-only statistics, contributor leaderboards, and QOTD history.</p></div>
+      <div class="card"><div class="icon">🛡️</div><h3 data-i18n="feature_admin_title">Administration</h3><p data-i18n="feature_admin_text">Manage configuration, logs, audit records, maintenance mode, and QOTD locking.</p></div>
+    </section>
+
+    <section class="section" id="commands">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_commands">EXPLORE</span><h2 data-i18n="commands_title">Command Explorer</h2><p class="section-intro" data-i18n="commands_intro">Click a command to see what it does and who can use it.</p></div></div>
+      <div class="command-grid explorer">
+        <button class="command-card command-item" data-command="qotd"><h3><code>/qotd</code></h3><p data-i18n="cmd_qotd">Create a new Question of the Day.</p><span class="tag">QOTD</span></button>
+        <button class="command-card command-item" data-command="edit"><h3><code>/edit</code></h3><p data-i18n="cmd_edit">Edit an existing QOTD by Discord message ID.</p><span class="tag">QOTD</span></button>
+        <button class="command-card command-item" data-command="delete"><h3><code>/delete</code></h3><p data-i18n="cmd_delete">Delete an existing QOTD by Discord message ID.</p><span class="tag">QOTD</span></button>
+        <button class="command-card command-item" data-command="info"><h3><code>/info</code></h3><p data-i18n="cmd_info">View information about a QOTD.</p><span class="tag">QOTD</span></button>
+        <button class="command-card command-item" data-command="stats"><h3><code>/stats</code></h3><p data-i18n="cmd_stats">View QOTD statistics for the current server.</p><span class="tag">STATS</span></button>
+        <button class="command-card command-item" data-command="leaderboard"><h3><code>/leaderboard</code></h3><p data-i18n="cmd_leaderboard">View the QOTD contributor leaderboard.</p><span class="tag">STATS</span></button>
+        <button class="command-card command-item" data-command="history"><h3><code>/history</code></h3><p data-i18n="cmd_history">View QOTD history.</p><span class="tag">STATS</span></button>
+        <button class="command-card command-item" data-command="setup"><h3><code>/setup</code></h3><p data-i18n="cmd_setup">Configure QOTD channels, roles, and language.</p><span class="tag">CONFIG</span></button>
+        <button class="command-card command-item" data-command="config"><h3><code>/config</code></h3><p data-i18n="cmd_config">View the current QOTD configuration.</p><span class="tag">CONFIG</span></button>
+        <button class="command-card command-item" data-command="logs"><h3><code>/logs</code></h3><p data-i18n="cmd_logs">View and filter QOTD logs.</p><span class="tag">LOGS</span></button>
+        <button class="command-card command-item" data-command="audit"><h3><code>/audit_log</code></h3><p data-i18n="cmd_audit">View detailed interaction attempts and errors.</p><span class="tag">OWNER</span></button>
+        <button class="command-card command-item" data-command="resetlogs"><h3><code>/reset_logs</code></h3><p data-i18n="cmd_resetlogs">Reset the normal QOTD logs.</p><span class="tag">OWNER</span></button>
+        <button class="command-card command-item" data-command="reset"><h3><code>/reset</code></h3><p data-i18n="cmd_reset">Reset the QOTD counter.</p><span class="tag">OWNER</span></button>
+        <button class="command-card command-item" data-command="maintenance"><h3><code>/maintenance</code></h3><p data-i18n="cmd_maintenance">Enable or disable maintenance mode.</p><span class="tag">OWNER</span></button>
+        <button class="command-card command-item" data-command="lock"><h3><code>/lock</code></h3><p data-i18n="cmd_lock">Lock or unlock QOTD creation.</p><span class="tag">OWNER</span></button>
+        <button class="command-card command-item" data-command="help"><h3><code>/help</code></h3><p data-i18n="cmd_help">Show the available QOTD Bot commands.</p><span class="tag">HELP</span></button>
       </div>
-      <div class="card">
-        <h3>History &amp; Statistics</h3>
-        <p>View server-only QOTD statistics, contributor leaderboards, and QOTD history with language filters.</p>
-      </div>
-      <div class="card">
-        <h3>Logs &amp; Administration</h3>
-        <p>Configure the bot, review QOTD logs, use the detailed audit log, reset counters or logs, and control maintenance and QOTD lock modes.</p>
+      <div class="permission-note"><strong data-i18n="permissions_label">Permissions:</strong> <span data-i18n="permissions_text">QOTD creation and editing use the configured server permissions. Owner-only tools are restricted to the Bot Owner or Server Owner where applicable.</span></div>
+    </section>
+
+    <section class="section" id="preview">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_preview">TRY IT</span><h2 data-i18n="preview_title">QOTD Preview</h2><p class="section-intro" data-i18n="preview_intro">Build a Discord-style QOTD preview directly in your browser.</p></div></div>
+      <div class="preview-layout">
+        <div class="preview-controls">
+          <label><span data-i18n="question_label">Question</span><textarea id="questionInput" maxlength="300">What game would you recommend to everyone?</textarea></label>
+          <label><span data-i18n="number_label">QOTD number</span><input id="numberInput" type="number" min="1" value="42"></label>
+          <label><span data-i18n="thanks_label">Suggested by</span><input id="authorInput" maxlength="80" value="Community Member"></label>
+        </div>
+        <div class="discord-preview"><div class="preview-title">💬 QUESTION OF THE DAY</div><div class="preview-number" id="previewNumber">#42</div><div class="preview-question" id="previewQuestion">What game would you recommend to everyone?</div><div class="preview-author"><span data-i18n="preview_suggested">Suggested by:</span> <span id="previewAuthor">Community Member</span></div><div class="preview-thread">🧵 <span data-i18n="preview_thread">QOTD discussion thread</span></div></div>
       </div>
     </section>
 
-    <section class="section">
-      <h2>Commands</h2>
-      <p class="section-intro">The current QOTD Bot command set.</p>
-
-      <div class="command-grid">
-        <div class="command-card">
-          <h3>QOTD</h3>
-          <ul>
-            <li><code>/qotd</code> — Create a new Question of the Day.</li>
-            <li><code>/edit</code> — Edit a QOTD by Discord message ID.</li>
-            <li><code>/delete</code> — Delete a QOTD by Discord message ID.</li>
-            <li><code>/info</code> — View information about a QOTD by Discord message ID.</li>
-          </ul>
-        </div>
-
-        <div class="command-card">
-          <h3>Statistics</h3>
-          <ul>
-            <li><code>/stats</code> — View QOTD statistics for the current server.</li>
-            <li><code>/leaderboard</code> — View the QOTD contributor leaderboard.</li>
-            <li><code>/history</code> — View QOTD history.</li>
-          </ul>
-        </div>
-
-        <div class="command-card">
-          <h3>Configuration</h3>
-          <ul>
-            <li><code>/setup</code> — Configure QOTD roles, channels, and bot language.</li>
-            <li><code>/config</code> — View the current QOTD configuration.</li>
-          </ul>
-        </div>
-
-        <div class="command-card">
-          <h3>Logs</h3>
-          <ul>
-            <li><code>/logs</code> — View and filter QOTD bot logs.</li>
-            <li><code>/audit_log</code> — View detailed interaction attempts and errors for the server.</li>
-            <li><code>/reset_logs</code> — Delete the normal QOTD logs for the server.</li>
-          </ul>
-        </div>
-
-        <div class="command-card">
-          <h3>Server Management</h3>
-          <ul>
-            <li><code>/reset</code> — Reset the QOTD counter.</li>
-            <li><code>/maintenance</code> — Enable or disable QOTD maintenance mode.</li>
-            <li><code>/lock</code> — Lock or unlock QOTD creation.</li>
-          </ul>
-        </div>
-
-        <div class="command-card">
-          <h3>Other</h3>
-          <ul>
-            <li><code>/help</code> — Show the available QOTD Bot commands.</li>
-          </ul>
-        </div>
+    <section class="section" id="dashboard">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_dashboard">OVERVIEW</span><h2 data-i18n="dashboard_title">Statistics Dashboard</h2><p class="section-intro" data-i18n="dashboard_intro">A public dashboard layout for the bot. Live database values can be connected later without changing the design.</p></div></div>
+      <div class="dashboard-grid">
+        <div class="dashboard-card"><span data-i18n="dash_commands">Commands</span><strong>16</strong><small data-i18n="dash_commands_note">available now</small></div>
+        <div class="dashboard-card"><span data-i18n="dash_servers">Servers</span><strong>5</strong><small data-i18n="dash_servers_note">last known count</small></div>
+        <div class="dashboard-card"><span data-i18n="dash_languages">Languages</span><strong>2</strong><small>EN · RU</small></div>
+        <div class="dashboard-card"><span data-i18n="dash_database">Database</span><strong>SQLite</strong><small data-i18n="dash_database_note">async application storage</small></div>
       </div>
-
-      <p class="permission-note"><strong>Permissions:</strong> <code>/qotd</code>, <code>/edit</code>, and <code>/delete</code> use the configured QOTD role permissions. Administrative commands and logs are restricted to the Bot Owner or Server Owner where applicable.</p>
+      <div class="leaderboard-preview"><div><span class="eyebrow" data-i18n="eyebrow_leaderboard">LEADERBOARD</span><h3 data-i18n="leaderboard_title">QOTD Creator Leaderboard</h3><p data-i18n="leaderboard_text">The public site can display live creator rankings once a read-only statistics endpoint is connected to the bot.</p></div><div class="leaderboard-placeholder"><span>🥇</span><span>🥈</span><span>🥉</span><em data-i18n="leaderboard_waiting">Waiting for live statistics</em></div></div>
     </section>
 
-    <section class="section">
-      <h2>Administration &amp; Safety</h2>
-      <div class="feature-list">
-        <div><strong>Maintenance mode</strong><span>Temporarily prevents QOTD creation while the server is being maintained.</span></div>
-        <div><strong>QOTD lock</strong><span>Allows authorized owners to lock QOTD creation independently of maintenance mode.</span></div>
-        <div><strong>Audit log</strong><span>Tracks interaction attempts and command errors for the server without storing command arguments or secrets.</span></div>
-        <div><strong>Async database</strong><span>The bot uses aiosqlite for its application database operations.</span></div>
+    <section class="section" id="setup">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_setup">GET STARTED</span><h2 data-i18n="setup_title">Setup Guide</h2><p class="section-intro" data-i18n="setup_intro">Get a server ready for its first QOTD in a few steps.</p></div></div>
+      <div class="steps">
+        <div class="step"><b>01</b><div><h3 data-i18n="step1_title">Invite QOTD Bot</h3><p data-i18n="step1_text">Use the Add to Discord button and select the server where you want to use QOTD Bot.</p></div></div>
+        <div class="step"><b>02</b><div><h3 data-i18n="step2_title">Run /setup</h3><p data-i18n="step2_text">Configure the QOTD channel, role and language for the server.</p></div></div>
+        <div class="step"><b>03</b><div><h3 data-i18n="step3_title">Check /config</h3><p data-i18n="step3_text">Confirm that the saved settings match the server configuration.</p></div></div>
+        <div class="step"><b>04</b><div><h3 data-i18n="step4_title">Create your first QOTD</h3><p data-i18n="step4_text">Run /qotd and start the discussion thread.</p></div></div>
       </div>
     </section>
 
-    <section class="section changelog">
-      <h2>Latest Changelog</h2>
-      <p class="section-intro">September 21, 2026</p>
-      <ul>
-        <li>Added <code>/audit_log</code> for detailed interaction auditing.</li>
-        <li>Added <code>/maintenance</code> and <code>/lock</code> for server management.</li>
-        <li>Expanded QOTD and administrative logging.</li>
-        <li>Updated <code>/help</code> to include all current commands.</li>
-        <li>Updated <code>/stats</code> to clearly represent current-server statistics.</li>
-        <li>Improved interaction handling, database reliability, and error resilience.</li>
-        <li>Fixed pagination and refresh handling for logs and audit logs.</li>
-      </ul>
+    <section class="section" id="permissions">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_permissions">ACCESS</span><h2 data-i18n="permissions_title">Permissions Guide</h2></div></div>
+      <div class="table-wrap"><table><thead><tr><th data-i18n="table_feature">Feature</th><th data-i18n="table_access">Access</th></tr></thead><tbody>
+        <tr><td><code>/qotd</code>, <code>/edit</code>, <code>/delete</code></td><td data-i18n="access_qotd">Configured QOTD permissions</td></tr>
+        <tr><td><code>/setup</code>, <code>/config</code></td><td data-i18n="access_config">Server configuration access</td></tr>
+        <tr><td><code>/logs</code></td><td data-i18n="access_logs">Available QOTD log access</td></tr>
+        <tr><td><code>/audit_log</code></td><td data-i18n="access_owner">Bot Owner or Server Owner</td></tr>
+        <tr><td><code>/reset</code>, <code>/reset_logs</code>, <code>/maintenance</code>, <code>/lock</code></td><td data-i18n="access_owner2">Bot Owner or Server Owner</td></tr>
+      </tbody></table></div>
     </section>
 
-    <div class="notice"><strong>Privacy first.</strong> QOTD Bot processes Discord and QOTD information needed for its features, including server configuration, QOTD history, normal logs, and detailed interaction audit records. See the <a href="privacy.html">Privacy Policy</a> for details.</div>
+    <section class="section" id="showcase">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_showcase">IN ACTION</span><h2 data-i18n="showcase_title">QOTD Showcase</h2><p class="section-intro" data-i18n="showcase_intro">A visual example of the kind of QOTD post the bot is designed to create.</p></div></div>
+      <div class="showcase-discord"><div class="fake-server"><div class="server-dot"></div><div><strong>Broken Blade</strong><span># question-of-the-day</span></div></div><div class="fake-message"><div class="fake-avatar">Q</div><div><div class="fake-author">QOTD Bot <small>BOT</small> <time>Today at 18:42</time></div><div class="fake-embed"><div class="fake-accent"></div><div><h3>💬 QUESTION OF THE DAY <span>#42</span></h3><p>What game would you recommend to everyone?</p><small>Suggested by: Community Member</small></div></div><div class="fake-thread">🧵 QOTD discussion thread</div></div></div></div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_faq">HELP</span><h2 data-i18n="faq_title">Frequently Asked Questions</h2></div></div>
+      <div class="faq">
+        <details><summary data-i18n="faq1_q">Why isn't /qotd working?</summary><p data-i18n="faq1_a">Check that the bot is configured with /setup, that the selected channel and role are correct, and that the server permissions allow the command.</p></details>
+        <details><summary data-i18n="faq2_q">How do I change the QOTD channel?</summary><p data-i18n="faq2_a">Run /setup again and update the server's QOTD configuration.</p></details>
+        <details><summary data-i18n="faq3_q">What does /lock do?</summary><p data-i18n="faq3_a">It lets an authorized owner temporarily prevent new QOTDs from being created.</p></details>
+        <details><summary data-i18n="faq4_q">What is /audit_log?</summary><p data-i18n="faq4_a">It provides a separate, detailed record of bot interaction attempts and errors for the server. It is restricted to the Bot Owner or Server Owner.</p></details>
+        <details><summary data-i18n="faq5_q">Can I use QOTD Bot on multiple servers?</summary><p data-i18n="faq5_a">Yes. Each server has its own configuration, counters, QOTD history and normal logs.</p></details>
+      </div>
+    </section>
+
+    <section class="section" id="changelog">
+      <div class="section-heading"><div><span class="eyebrow" data-i18n="eyebrow_changelog">UPDATES</span><h2 data-i18n="changelog_title">Changelog</h2></div></div>
+      <div class="timeline">
+        <article><span>SEP 21 · 2026</span><h3 data-i18n="change1_title">Website documentation overhaul</h3><p data-i18n="change1_text">Added the command explorer, setup guide, FAQ, permissions guide, QOTD preview, statistics dashboard layout, showcase and community section.</p></article>
+        <article><span>SEP 21 · 2026</span><h3 data-i18n="change2_title">Bot feature documentation</h3><p data-i18n="change2_text">Updated the website for Audit Log, Maintenance Mode, QOTD Lock, server statistics and the latest administration tools.</p></article>
+      </div>
+    </section>
+
+    <section class="section community">
+      <div class="community-box"><div><span class="eyebrow" data-i18n="eyebrow_community">COMMUNITY</span><h2 data-i18n="community_title">Join the QOTD Bot Community</h2><p data-i18n="community_text">Get support, discuss updates and share ideas with other QOTD Bot users.</p></div><a class="button" href="https://discord.gg/rYqGXWRbfJ" target="_blank" rel="noopener noreferrer" data-i18n="community_button">Join Discord</a></div>
+    </section>
+
+    <div class="notice"><strong data-i18n="privacy_first">Privacy first.</strong> <span data-i18n="privacy_text">QOTD Bot processes Discord and QOTD information needed for its features, including server configuration, QOTD history, normal logs, and detailed interaction audit records.</span> <a href="privacy.html" data-i18n="privacy_link">Read the Privacy Policy.</a></div>
   </main>
 
-  <footer>QOTD Bot · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></footer>
+  <footer>QOTD Bot · <a href="terms.html" data-i18n="nav_terms">Terms</a> · <a href="privacy.html" data-i18n="nav_privacy">Privacy</a></footer>
+
+  <script>
+    const translations = {
+      en: {
+        nav_commands:'Commands',nav_setup:'Setup',nav_faq:'FAQ',nav_changelog:'Changelog',nav_terms:'Terms',nav_privacy:'Privacy',badge:'DISCORD BOT',hero_subtitle:'A Discord bot for creating, managing, and tracking Question of the Day posts, server statistics, logs, and administrative settings.',add_discord:'Add to Discord',join_discord:'Join our Discord',status_title:'Bot status',status_note:'Live API status can be connected here.',commands_count:'Commands',servers_count:'Servers',purpose:'Question of the Day',feature_qotd_title:'Questions of the Day',feature_qotd_text:'Create QOTDs with numbering, role mentions, optional suggestions, and automatic Discord threads.',feature_stats_title:'Statistics & History',feature_stats_text:'View server-only statistics, contributor leaderboards, and QOTD history.',feature_admin_title:'Administration',feature_admin_text:'Manage configuration, logs, audit records, maintenance mode, and QOTD locking.',eyebrow_commands:'EXPLORE',commands_title:'Command Explorer',commands_intro:'Click a command to see what it does and who can use it.',cmd_qotd:'Create a new Question of the Day.',cmd_edit:'Edit an existing QOTD by Discord message ID.',cmd_delete:'Delete an existing QOTD by Discord message ID.',cmd_info:'View information about a QOTD.',cmd_stats:'View QOTD statistics for the current server.',cmd_leaderboard:'View the QOTD contributor leaderboard.',cmd_history:'View QOTD history.',cmd_setup:'Configure QOTD channels, roles, and language.',cmd_config:'View the current QOTD configuration.',cmd_logs:'View and filter QOTD logs.',cmd_audit:'View detailed interaction attempts and errors.',cmd_resetlogs:'Reset the normal QOTD logs.',cmd_reset:'Reset the QOTD counter.',cmd_maintenance:'Enable or disable maintenance mode.',cmd_lock:'Lock or unlock QOTD creation.',cmd_help:'Show the available QOTD Bot commands.',permissions_label:'Permissions:',permissions_text:'QOTD creation and editing use the configured server permissions. Owner-only tools are restricted to the Bot Owner or Server Owner where applicable.',eyebrow_preview:'TRY IT',preview_title:'QOTD Preview',preview_intro:'Build a Discord-style QOTD preview directly in your browser.',question_label:'Question',number_label:'QOTD number',thanks_label:'Suggested by',preview_suggested:'Suggested by:',preview_thread:'QOTD discussion thread',eyebrow_dashboard:'OVERVIEW',dashboard_title:'Statistics Dashboard',dashboard_intro:'A public dashboard layout for the bot. Live database values can be connected later without changing the design.',dash_commands:'Commands',dash_commands_note:'available now',dash_servers:'Servers',dash_servers_note:'last known count',dash_languages:'Languages',dash_database:'Database',dash_database_note:'async application storage',eyebrow_leaderboard:'LEADERBOARD',leaderboard_title:'QOTD Creator Leaderboard',leaderboard_text:'The public site can display live creator rankings once a read-only statistics endpoint is connected to the bot.',leaderboard_waiting:'Waiting for live statistics',eyebrow_setup:'GET STARTED',setup_title:'Setup Guide',setup_intro:'Get a server ready for its first QOTD in a few steps.',step1_title:'Invite QOTD Bot',step1_text:'Use the Add to Discord button and select the server where you want to use QOTD Bot.',step2_title:'Run /setup',step2_text:'Configure the QOTD channel, role and language for the server.',step3_title:'Check /config',step3_text:'Confirm that the saved settings match the server configuration.',step4_title:'Create your first QOTD',step4_text:'Run /qotd and start the discussion thread.',eyebrow_permissions:'ACCESS',permissions_title:'Permissions Guide',table_feature:'Feature',table_access:'Access',access_qotd:'Configured QOTD permissions',access_config:'Server configuration access',access_logs:'Available QOTD log access',access_owner:'Bot Owner or Server Owner',access_owner2:'Bot Owner or Server Owner',eyebrow_showcase:'IN ACTION',showcase_title:'QOTD Showcase',showcase_intro:'A visual example of the kind of QOTD post the bot is designed to create.',eyebrow_faq:'HELP',faq_title:'Frequently Asked Questions',faq1_q:"Why isn't /qotd working?",faq1_a:'Check that the bot is configured with /setup, that the selected channel and role are correct, and that the server permissions allow the command.',faq2_q:'How do I change the QOTD channel?',faq2_a:"Run /setup again and update the server's QOTD configuration.",faq3_q:'What does /lock do?',faq3_a:'It lets an authorized owner temporarily prevent new QOTDs from being created.',faq4_q:'What is /audit_log?',faq4_a:'It provides a separate, detailed record of bot interaction attempts and errors for the server. It is restricted to the Bot Owner or Server Owner.',faq5_q:'Can I use QOTD Bot on multiple servers?',faq5_a:'Yes. Each server has its own configuration, counters, QOTD history and normal logs.',eyebrow_changelog:'UPDATES',changelog_title:'Changelog',change1_title:'Website documentation overhaul',change1_text:'Added the command explorer, setup guide, FAQ, permissions guide, QOTD preview, statistics dashboard layout, showcase and community section.',change2_title:'Bot feature documentation',change2_text:'Updated the website for Audit Log, Maintenance Mode, QOTD Lock, server statistics and the latest administration tools.',eyebrow_community:'COMMUNITY',community_title:'Join the QOTD Bot Community',community_text:'Get support, discuss updates and share ideas with other QOTD Bot users.',community_button:'Join Discord',privacy_first:'Privacy first.',privacy_text:'QOTD Bot processes Discord and QOTD information needed for its features, including server configuration, QOTD history, normal logs, and detailed interaction audit records.',privacy_link:'Read the Privacy Policy.'
+      },
+      ru: {
+        nav_commands:'Команды',nav_setup:'Настройка',nav_faq:'FAQ',nav_changelog:'Чейнджлог',nav_terms:'Условия',nav_privacy:'Приватность',badge:'DISCORD БОТ',hero_subtitle:'Discord-бот для создания и управления вопросами дня, статистики сервера, логов и административных настроек.',add_discord:'Добавить в Discord',join_discord:'Наш Discord',status_title:'Статус бота',status_note:'Здесь можно подключить API для отображения статуса в реальном времени.',commands_count:'Команд',servers_count:'Серверов',purpose:'Вопрос дня',feature_qotd_title:'Вопросы дня',feature_qotd_text:'Создавайте QOTD с нумерацией, упоминанием роли, дополнительным предложением и автоматической веткой Discord.',feature_stats_title:'Статистика и история',feature_stats_text:'Просматривайте статистику сервера, таблицу лидеров и историю QOTD.',feature_admin_title:'Администрирование',feature_admin_text:'Управляйте настройками, логами, audit log, режимом обслуживания и блокировкой QOTD.',eyebrow_commands:'КОМАНДЫ',commands_title:'Обзор команд',commands_intro:'Нажмите на команду, чтобы узнать, что она делает и кто может её использовать.',cmd_qotd:'Создать новый вопрос дня.',cmd_edit:'Изменить QOTD по Discord Message ID.',cmd_delete:'Удалить QOTD по Discord Message ID.',cmd_info:'Просмотреть информацию о QOTD.',cmd_stats:'Просмотреть статистику QOTD текущего сервера.',cmd_leaderboard:'Просмотреть таблицу лидеров создателей QOTD.',cmd_history:'Просмотреть историю QOTD.',cmd_setup:'Настроить канал, роль и язык QOTD.',cmd_config:'Просмотреть текущую конфигурацию QOTD.',cmd_logs:'Просматривать и фильтровать логи QOTD.',cmd_audit:'Просмотреть подробные попытки взаимодействия и ошибки.',cmd_resetlogs:'Сбросить обычные логи QOTD.',cmd_reset:'Сбросить счётчик QOTD.',cmd_maintenance:'Включить или выключить режим обслуживания.',cmd_lock:'Заблокировать или разблокировать создание QOTD.',cmd_help:'Показать доступные команды QOTD Bot.',permissions_label:'Права:',permissions_text:'Создание и изменение QOTD используют настроенные права сервера. Команды только для владельцев доступны владельцу бота или владельцу сервера, где это предусмотрено.',eyebrow_preview:'ПОПРОБУЙТЕ',preview_title:'Предпросмотр QOTD',preview_intro:'Создайте Discord-подобный предпросмотр QOTD прямо в браузере.',question_label:'Вопрос',number_label:'Номер QOTD',thanks_label:'Предложил',preview_suggested:'Предложил:',preview_thread:'Ветка обсуждения QOTD',eyebrow_dashboard:'ОБЗОР',dashboard_title:'Панель статистики',dashboard_intro:'Макет публичной панели бота. Живые значения базы можно подключить позже без изменения дизайна.',dash_commands:'Команды',dash_commands_note:'доступно сейчас',dash_servers:'Серверы',dash_servers_note:'последнее известное число',dash_languages:'Языки',dash_database:'База данных',dash_database_note:'асинхронное хранилище',eyebrow_leaderboard:'ТАБЛИЦА ЛИДЕРОВ',leaderboard_title:'Таблица создателей QOTD',leaderboard_text:'Сайт сможет показывать актуальный рейтинг создателей после подключения отдельного API только для чтения статистики бота.',leaderboard_waiting:'Ожидание живой статистики',eyebrow_setup:'НАЧАЛО РАБОТЫ',setup_title:'Руководство по настройке',setup_intro:'Подготовьте сервер к первому QOTD всего за несколько шагов.',step1_title:'Добавьте QOTD Bot',step1_text:'Нажмите «Добавить в Discord» и выберите сервер, на котором хотите использовать бота.',step2_title:'Запустите /setup',step2_text:'Настройте канал QOTD, роль и язык сервера.',step3_title:'Проверьте /config',step3_text:'Убедитесь, что сохранённые настройки соответствуют конфигурации сервера.',step4_title:'Создайте первый QOTD',step4_text:'Запустите /qotd и начните обсуждение в созданной ветке.',eyebrow_permissions:'ДОСТУП',permissions_title:'Руководство по правам',table_feature:'Функция',table_access:'Доступ',access_qotd:'Настроенные права QOTD',access_config:'Доступ к настройкам сервера',access_logs:'Доступ к логам QOTD',access_owner:'Владелец бота или владелец сервера',access_owner2:'Владелец бота или владелец сервера',eyebrow_showcase:'В ДЕЙСТВИИ',showcase_title:'Пример QOTD',showcase_intro:'Визуальный пример сообщения QOTD, которое создаёт бот.',eyebrow_faq:'ПОМОЩЬ',faq_title:'Часто задаваемые вопросы',faq1_q:'Почему /qotd не работает?',faq1_a:'Проверьте настройки через /setup, выбранный канал и роль, а также права сервера для команды.',faq2_q:'Как изменить канал QOTD?',faq2_a:'Снова запустите /setup и обновите конфигурацию QOTD сервера.',faq3_q:'Что делает /lock?',faq3_a:'Позволяет владельцу временно запретить создание новых QOTD.',faq4_q:'Что такое /audit_log?',faq4_a:'Это отдельный подробный журнал попыток взаимодействия с ботом и ошибок на сервере. Доступен владельцу бота или сервера.',faq5_q:'Можно использовать QOTD Bot на нескольких серверах?',faq5_a:'Да. У каждого сервера свои настройки, счётчики, история QOTD и обычные логи.',eyebrow_changelog:'ОБНОВЛЕНИЯ',changelog_title:'Чейнджлог',change1_title:'Большое обновление сайта',change1_text:'Добавлены обзор команд, руководство по настройке, FAQ, права доступа, предпросмотр QOTD, макет панели статистики, пример QOTD и раздел сообщества.',change2_title:'Документация функций бота',change2_text:'Сайт обновлён для Audit Log, Maintenance Mode, QOTD Lock, статистики сервера и новых административных инструментов.',eyebrow_community:'СООБЩЕСТВО',community_title:'Присоединяйтесь к сообществу QOTD Bot',community_text:'Получайте помощь, обсуждайте обновления и предлагайте идеи вместе с другими пользователями QOTD Bot.',community_button:'Присоединиться',privacy_first:'Конфиденциальность прежде всего.',privacy_text:'QOTD Bot обрабатывает данные Discord и QOTD, необходимые для работы функций, включая настройки сервера, историю QOTD, обычные логи и подробные audit records.',privacy_link:'Открыть Privacy Policy.'
+      }
+    };
+
+    const switcher = document.getElementById('languageSwitch');
+    let currentLanguage = localStorage.getItem('qotd-site-language') || 'en';
+    function applyLanguage(lang){
+      currentLanguage = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang][key]) el.textContent = translations[lang][key];
+      });
+      switcher.textContent = lang === 'en' ? '🇷🇺 RU' : '🇬🇧 EN';
+      localStorage.setItem('qotd-site-language', lang);
+    }
+    switcher.addEventListener('click', () => applyLanguage(currentLanguage === 'en' ? 'ru' : 'en'));
+    applyLanguage(currentLanguage);
+
+    const q = document.getElementById('questionInput'), n = document.getElementById('numberInput'), a = document.getElementById('authorInput');
+    function updatePreview(){ document.getElementById('previewQuestion').textContent = q.value || '—'; document.getElementById('previewNumber').textContent = '#' + (n.value || '1'); document.getElementById('previewAuthor').textContent = a.value || '—'; }
+    [q,n,a].forEach(el => el.addEventListener('input', updatePreview));
+
+    const details = {
+      qotd:'Create and publish a new QOTD using the server configuration.', edit:'Edit an existing QOTD using its Discord message ID.', delete:'Delete an existing QOTD using its Discord message ID.', info:'Inspect stored information for a QOTD using its Discord message ID.', stats:'Show QOTD statistics for the current server.', leaderboard:'Show the server QOTD contributor leaderboard.', history:'Browse QOTD history for the server.', setup:'Configure the QOTD channel, role and language.', config:'Display the current QOTD configuration.', logs:'Browse normal QOTD logs with filters and pagination.', audit:'View the separate detailed interaction audit log. Owner-only.', resetlogs:'Reset normal QOTD logs. Owner-only.', reset:'Reset the QOTD counter. Owner-only.', maintenance:'Enable or disable maintenance mode. Owner-only.', lock:'Lock or unlock QOTD creation. Owner-only.', help:'Open the bot help menu.'
+    };
+    document.querySelectorAll('.command-item').forEach(btn => btn.addEventListener('click', () => {
+      const key = btn.dataset.command;
+      const msg = details[key];
+      if (msg) alert(msg);
+    }));
+  </script>
 </body>
 </html>
