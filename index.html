@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>QOTD Bot</title>
+  <title>QOTD Bot — Discord Question of the Day Bot</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
     <section class="hero">
       <span class="badge">DISCORD BOT</span>
       <h1>QOTD Bot</h1>
-      <p class="subtitle">A Discord bot for creating, managing, and tracking Question of the Day posts and related server activity.</p>
+      <p class="subtitle">A Discord bot for creating, managing, and tracking Question of the Day posts, server statistics, logs, and administrative settings.</p>
 
       <div class="buttons">
         <a class="button" href="https://discord.com/oauth2/authorize?client_id=1548745092586676246">Add to Discord</a>
@@ -43,12 +43,106 @@
     </section>
 
     <section class="cards">
-      <div class="card"><h3>Questions of the Day</h3><p>Create and manage QOTD posts with numbering, questions, and Discord threads.</p></div>
-      <div class="card"><h3>History &amp; Statistics</h3><p>Keep QOTD history and provide statistics and leaderboard information.</p></div>
-      <div class="card"><h3>Administration</h3><p>Manage configuration, permissions, counters, and administrative logs.</p></div>
+      <div class="card">
+        <h3>Questions of the Day</h3>
+        <p>Create QOTDs with language-specific channels, numbering, role mentions, optional suggestions, and automatic Discord threads. Authorized users can edit or delete existing QOTDs.</p>
+      </div>
+      <div class="card">
+        <h3>History &amp; Statistics</h3>
+        <p>View server-only QOTD statistics, contributor leaderboards, and QOTD history with language filters.</p>
+      </div>
+      <div class="card">
+        <h3>Logs &amp; Administration</h3>
+        <p>Configure the bot, review QOTD logs, use the detailed audit log, reset counters or logs, and control maintenance and QOTD lock modes.</p>
+      </div>
     </section>
 
-    <div class="notice"><strong>Privacy first.</strong> QOTD Bot is designed to process only information reasonably necessary for its features.</div>
+    <section class="section">
+      <h2>Commands</h2>
+      <p class="section-intro">The current QOTD Bot command set.</p>
+
+      <div class="command-grid">
+        <div class="command-card">
+          <h3>QOTD</h3>
+          <ul>
+            <li><code>/qotd</code> — Create a new Question of the Day.</li>
+            <li><code>/edit</code> — Edit a QOTD by Discord message ID.</li>
+            <li><code>/delete</code> — Delete a QOTD by Discord message ID.</li>
+            <li><code>/info</code> — View information about a QOTD by Discord message ID.</li>
+          </ul>
+        </div>
+
+        <div class="command-card">
+          <h3>Statistics</h3>
+          <ul>
+            <li><code>/stats</code> — View QOTD statistics for the current server.</li>
+            <li><code>/leaderboard</code> — View the QOTD contributor leaderboard.</li>
+            <li><code>/history</code> — View QOTD history.</li>
+          </ul>
+        </div>
+
+        <div class="command-card">
+          <h3>Configuration</h3>
+          <ul>
+            <li><code>/setup</code> — Configure QOTD roles, channels, and bot language.</li>
+            <li><code>/config</code> — View the current QOTD configuration.</li>
+          </ul>
+        </div>
+
+        <div class="command-card">
+          <h3>Logs</h3>
+          <ul>
+            <li><code>/logs</code> — View and filter QOTD bot logs.</li>
+            <li><code>/audit_log</code> — View detailed interaction attempts and errors for the server.</li>
+            <li><code>/reset_logs</code> — Delete the normal QOTD logs for the server.</li>
+          </ul>
+        </div>
+
+        <div class="command-card">
+          <h3>Server Management</h3>
+          <ul>
+            <li><code>/reset</code> — Reset the QOTD counter.</li>
+            <li><code>/maintenance</code> — Enable or disable QOTD maintenance mode.</li>
+            <li><code>/lock</code> — Lock or unlock QOTD creation.</li>
+          </ul>
+        </div>
+
+        <div class="command-card">
+          <h3>Other</h3>
+          <ul>
+            <li><code>/help</code> — Show the available QOTD Bot commands.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="permission-note"><strong>Permissions:</strong> <code>/qotd</code>, <code>/edit</code>, and <code>/delete</code> use the configured QOTD role permissions. Administrative commands and logs are restricted to the Bot Owner or Server Owner where applicable.</p>
+    </section>
+
+    <section class="section">
+      <h2>Administration &amp; Safety</h2>
+      <div class="feature-list">
+        <div><strong>Maintenance mode</strong><span>Temporarily prevents QOTD creation while the server is being maintained.</span></div>
+        <div><strong>QOTD lock</strong><span>Allows authorized owners to lock QOTD creation independently of maintenance mode.</span></div>
+        <div><strong>Audit log</strong><span>Tracks interaction attempts and command errors for the server without storing command arguments or secrets.</span></div>
+        <div><strong>Async database</strong><span>The bot uses aiosqlite for its application database operations.</span></div>
+      </div>
+    </section>
+
+    <section class="section changelog">
+      <h2>Latest Changelog</h2>
+      <p class="section-intro">September 21, 2026</p>
+      <ul>
+        <li>Added <code>/audit_log</code> for detailed interaction auditing.</li>
+        <li>Added <code>/maintenance</code> and <code>/lock</code> for server management.</li>
+        <li>Expanded QOTD and administrative logging.</li>
+        <li>Updated <code>/help</code> to include all current commands.</li>
+        <li>Updated <code>/stats</code> to clearly represent current-server statistics.</li>
+        <li>Improved interaction handling, database reliability, and error resilience.</li>
+        <li>Fixed pagination and refresh handling for logs and audit logs.</li>
+      </ul>
+    </section>
+
+    <div class="notice"><strong>Privacy first.</strong> QOTD Bot processes Discord and QOTD information needed for its features, including server configuration, QOTD history, normal logs, and detailed interaction audit records. See the <a href="privacy.html">Privacy Policy</a> for details.</div>
   </main>
 
   <footer>QOTD Bot · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></footer>
