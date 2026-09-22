@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Quello — your Question of the Day bot for creating, managing, and organizing QOTDs and discussions.">
   <title>Quello — Your Question of the Day Bot</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
   <link rel="icon" type="image/png" href="quello-avatar.png">
   <link rel="apple-touch-icon" href="quello-avatar.png">
 </head>
@@ -657,6 +657,59 @@
     }
     commandSelect?.addEventListener('change',updatePlayground);
     updatePlayground();
+
+    // Command Playground — custom command picker
+    const commandSelect = document.getElementById('commandSelect');
+    const commandPicker = document.getElementById('commandPicker');
+    const commandPickerToggle = document.getElementById('commandPickerToggle');
+    const commandPickerOptions = Array.from(document.querySelectorAll('.command-picker-option'));
+    const commandPickerCurrent = commandPicker?.querySelector('.command-picker-current');
+
+    function setCommandPickerOpen(open) {
+      if (!commandPicker) return;
+      commandPicker.classList.toggle('open', open);
+      commandPickerToggle?.setAttribute('aria-expanded', String(open));
+    }
+
+    function selectCommand(value) {
+      if (!commandSelect) return;
+
+      commandSelect.value = value;
+      if (commandPickerCurrent) commandPickerCurrent.textContent = '/' + value;
+
+      commandPickerOptions.forEach(option => {
+        const active = option.dataset.value === value;
+        option.classList.toggle('active', active);
+        option.setAttribute('aria-selected', String(active));
+      });
+
+      // Keep the existing Playground logic in sync.
+      commandSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      setCommandPickerOpen(false);
+    }
+
+    commandPickerToggle?.addEventListener('click', event => {
+      event.stopPropagation();
+      setCommandPickerOpen(!commandPicker?.classList.contains('open'));
+    });
+
+    commandPickerOptions.forEach(option => {
+      option.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        selectCommand(option.dataset.value);
+      });
+    });
+
+    document.addEventListener('click', event => {
+      if (commandPicker && !commandPicker.contains(event.target)) {
+        setCommandPickerOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setCommandPickerOpen(false);
+    });
 
     // Build Your QOTD flow
     let flowStep=1, flowLanguage='en';

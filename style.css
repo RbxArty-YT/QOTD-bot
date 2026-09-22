@@ -181,6 +181,7 @@ input::placeholder, textarea::placeholder { color: #777d8b; opacity: 1; }
 /* Custom command picker — avoids the ugly Android/Chrome native select popup. */
 .command-picker { position: relative; width: 100%; margin-top: 0; }
 .command-picker-toggle {
+  -webkit-appearance: none; appearance: none; outline: none; box-shadow: none;
   width: 100%; min-height: 52px; padding: 0 15px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   border: 1px solid #303441; border-radius: 10px;
@@ -202,6 +203,7 @@ input::placeholder, textarea::placeholder { color: #777d8b; opacity: 1; }
 }
 .command-picker.open .command-picker-menu { display: grid; gap: 3px; }
 .command-picker-option {
+  -webkit-appearance: none; appearance: none; outline: none; box-shadow: none;
   width: 100%; min-height: 52px; padding: 9px 11px;
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   border: 0; border-radius: 8px; background: transparent; color: #f2f3f5;
