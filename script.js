@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageCurrentFlag = document.getElementById('languageCurrentFlag');
     const languageCurrentCode = document.getElementById('languageCurrentCode');
     const languageOptions = Array.from(document.querySelectorAll('.language-option'));
+
     const languageMeta = {
       en: { flag:'🇬🇧', code:'EN' },
       ru: { flag:'🇷🇺', code:'RU' },
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fr: { flag:'🇫🇷', code:'FR' },
       it: { flag:'🇮🇹', code:'IT' }
     };
+
     let currentLanguage = localStorage.getItem('quello-site-language-v2') || 'en';
 
     function setLanguageMenu(open){
@@ -40,43 +42,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyLanguage(lang){
       if (!translations[lang]) lang = 'en';
+
       currentLanguage = lang;
       document.documentElement.lang = lang;
+
       const dictionary = translations[lang] || {};
       const fallback = translations.en || {};
+
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         const value = dictionary[key] ?? fallback[key];
-        if (value != null) el.textContent = value;
+
+        if (value != null) {
+          el.textContent = value;
+        }
       });
+
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.dataset.i18nPlaceholder;
         const value = dictionary[key] ?? fallback[key];
-        if (value != null) el.placeholder = value;
+
+        if (value != null) {
+          el.placeholder = value;
+        }
       });
+
       const meta = languageMeta[lang];
-      if (languageCurrentFlag) languageCurrentFlag.textContent = meta?.flag || '🇬🇧';
-      if (languageCurrentCode) languageCurrentCode.textContent = meta?.code || 'EN';
+
+      if (languageCurrentFlag) {
+        languageCurrentFlag.textContent = meta?.flag || '🇬🇧';
+      }
+
+      if (languageCurrentCode) {
+        languageCurrentCode.textContent = meta?.code || 'EN';
+      }
+
       languageOptions.forEach(option => {
         const active = option.dataset.language === lang;
         option.classList.toggle('active', active);
         option.setAttribute('aria-selected', String(active));
       });
+
       localStorage.setItem('quello-site-language-v2', lang);
       updatePreview();
     }
 
-    languageSwitch?.addEventListener('click', () => setLanguageMenu(!languagePicker?.classList.contains('open')));
-    languageOptions.forEach(option => option.addEventListener('click', () => {
-      applyLanguage(option.dataset.language);
-      setLanguageMenu(false);
-    }));
+    languageSwitch?.addEventListener('click', () => {
+      setLanguageMenu(!languagePicker?.classList.contains('open'));
+    });
+
+    languageOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        applyLanguage(option.dataset.language);
+        setLanguageMenu(false);
+      });
+    });
+
     document.addEventListener('click', e => {
-      if (languagePicker && !languagePicker.contains(e.target)) setLanguageMenu(false);
+      if (languagePicker && !languagePicker.contains(e.target)) {
+        setLanguageMenu(false);
+      }
     });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') setLanguageMenu(false);
-    });
+
     const sideMenu = document.getElementById('sideMenu');
     const menuToggle = document.getElementById('menuToggle');
     const menuClose = document.getElementById('menuClose');
@@ -90,28 +117,47 @@ document.addEventListener('DOMContentLoaded', () => {
       sideMenu?.setAttribute('aria-hidden', String(!open));
       document.body.classList.toggle('menu-open', open);
     }
+
     menuToggle?.addEventListener('click', () => setMenu(true));
     menuClose?.addEventListener('click', () => setMenu(false));
     menuOverlay?.addEventListener('click', () => setMenu(false));
-    menuLinks.forEach(link => link.addEventListener('click', () => setMenu(false)));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { setMenu(false); setCommandDrawer?.(false); } });
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => setMenu(false));
+    });
 
-    // Highlight the section currently visible on the page.
-    const sectionLinks = Array.from(menuLinks).filter(link => link.getAttribute('href')?.startsWith('#'));
+    const sectionLinks = Array.from(menuLinks)
+      .filter(link => link.getAttribute('href')?.startsWith('#'));
+
     const trackedSections = sectionLinks
-      .map(link => ({ link, section: document.querySelector(link.getAttribute('href')) }))
+      .map(link => ({
+        link,
+        section: document.querySelector(link.getAttribute('href'))
+      }))
       .filter(item => item.section);
 
     let activeSection = 'home';
 
     function setActiveSection(id) {
-      if (!id || id === activeSection && document.querySelector('.side-menu-links a.active')) return;
+      if (
+        !id ||
+        id === activeSection &&
+        document.querySelector('.side-menu-links a.active')
+      ) {
+        return;
+      }
+
       activeSection = id;
+
       sectionLinks.forEach(link => {
         const isActive = link.getAttribute('href') === `#${id}`;
+
         link.classList.toggle('active', isActive);
-        if (isActive) link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
+
+        if (isActive) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
       });
     }
 
@@ -121,20 +167,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       for (const { section } of trackedSections) {
         const rect = section.getBoundingClientRect();
+
         if (rect.top <= marker && rect.bottom > marker) {
           current = section.id;
         }
       }
 
-      // Near the very top, keep Home selected.
-      if (window.scrollY < 180) current = 'home';
+      if (window.scrollY < 180) {
+        current = 'home';
+      }
+
       setActiveSection(current);
     }
 
     let scrollTick = false;
+
     window.addEventListener('scroll', () => {
       if (scrollTick) return;
+
       scrollTick = true;
+
       requestAnimationFrame(() => {
         detectActiveSection();
         scrollTick = false;
@@ -159,12 +211,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyStatus = document.getElementById('copyStatus');
 
     function updatePreview(){
-      if (!q || !n || !a || !lang || !showAuthor || !count || !previewQuestion || !previewNumber || !previewAuthor || !previewAuthorLine || !previewTitle || !previewThread) return;
+      if (
+        !q ||
+        !n ||
+        !a ||
+        !lang ||
+        !showAuthor ||
+        !count ||
+        !previewQuestion ||
+        !previewNumber ||
+        !previewAuthor ||
+        !previewAuthorLine ||
+        !previewTitle ||
+        !previewThread
+      ) {
+        return;
+      }
+
       previewQuestion.textContent = q.value.trim() || '—';
       previewNumber.textContent = '#' + (n.value || '1');
       previewAuthor.textContent = a.value.trim() || '—';
-      previewAuthorLine.style.display = showAuthor.checked && a.value.trim() ? 'block' : 'none';
+
+      previewAuthorLine.style.display =
+        showAuthor.checked && a.value.trim() ? 'block' : 'none';
+
       count.textContent = q.value.length;
+
       if (lang.value === 'ru') {
         previewTitle.textContent = '💬 ВОПРОС ДНЯ';
         previewThread.textContent = 'Ветка обсуждения QOTD';
@@ -174,122 +246,560 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    [q,n,a,lang,showAuthor].filter(Boolean).forEach(el => el.addEventListener('input', updatePreview));
+    [q, n, a, lang, showAuthor]
+      .filter(Boolean)
+      .forEach(el => el.addEventListener('input', updatePreview));
+
     lang?.addEventListener('change', updatePreview);
 
     document.getElementById('resetPreview')?.addEventListener('click', () => {
-      q.value = 'What game would you recommend to everyone?';
-      n.value = '42';
-      a.value = 'Community Member';
-      lang.value = 'en';
-      showAuthor.checked = true;
-      copyStatus.textContent = '';
+      if (q) q.value = 'What game would you recommend to everyone?';
+      if (n) n.value = '42';
+      if (a) a.value = 'Community Member';
+      if (lang) lang.value = 'en';
+      if (showAuthor) showAuthor.checked = true;
+      if (copyStatus) copyStatus.textContent = '';
       updatePreview();
     });
 
     document.getElementById('copyPreview')?.addEventListener('click', async () => {
-      const title = lang.value === 'ru' ? '💬 ВОПРОС ДНЯ' : '💬 QUESTION OF THE DAY';
-      const thread = lang.value === 'ru' ? '🧵 Ветка обсуждения QOTD' : '🧵 QOTD discussion thread';
-      const credit = showAuthor.checked && a.value.trim() ? `\n\n${lang.value === 'ru' ? 'Предложил' : 'Suggested by'}: ${a.value.trim()}` : '';
-      const text = `${title}\n#${n.value || '1'}\n\n${q.value.trim() || '—'}${credit}\n\n${thread}`;
+      if (!q || !n || !a || !lang || !showAuthor || !copyStatus) return;
+
+      const title =
+        lang.value === 'ru'
+          ? '💬 ВОПРОС ДНЯ'
+          : '💬 QUESTION OF THE DAY';
+
+      const thread =
+        lang.value === 'ru'
+          ? '🧵 Ветка обсуждения QOTD'
+          : '🧵 QOTD discussion thread';
+
+      const credit =
+        showAuthor.checked && a.value.trim()
+          ? `\n\n${lang.value === 'ru' ? 'Предложил' : 'Suggested by'}: ${a.value.trim()}`
+          : '';
+
+      const text =
+        `${title}\n#${n.value || '1'}\n\n${q.value.trim() || '—'}${credit}\n\n${thread}`;
+
       try {
         await navigator.clipboard.writeText(text);
-        copyStatus.textContent = lang.value === 'ru' ? 'Скопировано!' : 'Copied!';
+        copyStatus.textContent =
+          lang.value === 'ru' ? 'Скопировано!' : 'Copied!';
       } catch {
-        copyStatus.textContent = lang.value === 'ru' ? 'Не удалось скопировать автоматически.' : 'Automatic copy is not available in this browser.';
+        copyStatus.textContent =
+          lang.value === 'ru'
+            ? 'Не удалось скопировать автоматически.'
+            : 'Automatic copy is not available in this browser.';
       }
-      setTimeout(() => copyStatus.textContent = '', 2500);
+
+      setTimeout(() => {
+        copyStatus.textContent = '';
+      }, 2500);
     });
 
     const checklist = document.querySelectorAll('.setup-check');
     const checklistProgress = document.getElementById('checklistProgress');
     const checklistStorageKey = 'quello-setup-checklist';
+
     function updateChecklist(){
       const state = {};
       let done = 0;
+
       checklist.forEach(item => {
         state[item.dataset.key] = item.checked;
-        if (item.checked) done++;
+
+        if (item.checked) {
+          done++;
+        }
       });
-      if (checklistProgress) checklistProgress.textContent = `${done} / ${checklist.length}`;
+
+      if (checklistProgress) {
+        checklistProgress.textContent = `${done} / ${checklist.length}`;
+      }
+
       localStorage.setItem(checklistStorageKey, JSON.stringify(state));
     }
+
     try {
-      const saved = JSON.parse(localStorage.getItem(checklistStorageKey) || '{}');
-      checklist.forEach(item => { item.checked = Boolean(saved[item.dataset.key]); });
+      const saved = JSON.parse(
+        localStorage.getItem(checklistStorageKey) || '{}'
+      );
+
+      checklist.forEach(item => {
+        item.checked = Boolean(saved[item.dataset.key]);
+      });
     } catch {}
-    checklist.forEach(item => item.addEventListener('change', updateChecklist));
-    updateChecklist();
 
-
-    // Command Playground
-    const playgroundData = {
-      qotd:['QOTD','Create a new Question of the Day.','Create and publish a QOTD using the configured server settings.','Configured QOTD role, Bot Owner or Server Owner','/qotd question:"What should we discuss today?"'],
-      edit:['QOTD','Edit an existing QOTD.','Change a QOTD by its Discord message ID.','Configured QOTD role, Bot Owner or Server Owner','/edit message_id:123456789 question:"New question"'],
-      delete:['QOTD','Delete an existing QOTD.','Remove a QOTD by its Discord message ID.','Configured QOTD role, Bot Owner or Server Owner','/delete message_id:123456789'],
-      leaderboard:['COMMUNITY','View QOTD rankings.','See Creator and Responder rankings for the current server.','Available to all users','/leaderboard'],
-      history:['INFO','Browse QOTD history.','Explore previously created QOTDs on the current server.','Available to all users','/history'],
-      setup:['SETUP','Configure Quello.','Set the QOTD role, allowed role, channels, and bot language.','Bot Owner or Server Owner','/setup'],
-      logs:['ADMIN','Review QOTD logs.','View and filter normal QOTD logs with pagination.','Bot Owner or Server Owner','/logs'],
-      audit_log:['OWNER','Inspect the audit trail.','View detailed interaction attempts and errors.','Bot Owner or Server Owner','/audit_log'],
-      maintenance:['OWNER','Manage maintenance mode.','Temporarily block new QOTD creation while maintaining the server.','Bot Owner or Server Owner','/maintenance enabled:true'],
-      lock:['OWNER','Lock QOTD creation.','Lock or unlock the creation of new QOTDs.','Bot Owner or Server Owner','/lock enabled:true']
-    };
-    const commandSelect = document.getElementById('commandSelect');
-    function updatePlayground(){
-      if(!commandSelect) return;
-      const d=playgroundData[commandSelect.value]||playgroundData.qotd;
-      document.getElementById('playgroundName').textContent='/'+commandSelect.value;
-      document.getElementById('playgroundTag').textContent=d[0];
-      document.getElementById('playgroundTitle').textContent=d[1];
-      document.getElementById('playgroundDescription').textContent=d[2];
-      document.getElementById('playgroundAccess').textContent=d[3];
-      document.getElementById('playgroundExample').textContent=d[4];
-      localStorage.setItem('quello-playground-used','1');
-      unlockAchievement('playground');
-    }
-    commandSelect?.addEventListener('change',updatePlayground);
-    updatePlayground();
-
-    // Build Your QOTD flow
-    let flowStep=1, flowLanguage='en';
-    const flowPanels=Array.from(document.querySelectorAll('.flow-panel'));
-    const flowSteps=Array.from(document.querySelectorAll('.flow-step'));
-    function updateFlow(){
-      flowPanels.forEach(p=>p.classList.toggle('active',p.dataset.panel===String(flowStep)));
-      flowSteps.forEach(p=>p.classList.toggle('active',Number(p.dataset.step)===flowStep));
-      if(flowStep===3){
-        const flowQuestion=document.getElementById('flowQuestion');
-        const generated=document.getElementById('generatedCommand');
-        const q=flowQuestion?.value.trim()||'What should we discuss today?';
-        const safe=q.replace(/"/g,'\\"');
-        if (generated) generated.textContent=`/qotd question:"${safe}" language:${flowLanguage}`;
-      }
-    }
-    document.querySelectorAll('.flow-next').forEach(b=>b.addEventListener('click',()=>{if(flowStep<3){flowStep++;updateFlow()}}));
-    document.querySelectorAll('.flow-back').forEach(b=>b.addEventListener('click',()=>{if(flowStep>1){flowStep--;updateFlow()}}));
-    document.querySelectorAll('.flow-language').forEach(b=>b.addEventListener('click',()=>{flowLanguage=b.dataset.flowLang;document.querySelectorAll('.flow-language').forEach(x=>x.classList.toggle('active',x===b));updateFlow()}));
-    document.getElementById('flowQuestion')?.addEventListener('input',updateFlow);
-    document.getElementById('copyGenerated')?.addEventListener('click',async()=>{
-      const text=document.getElementById('generatedCommand').textContent;
-      const status=document.getElementById('flowCopyStatus');
-      try{await navigator.clipboard.writeText(text);status.textContent='Copied!';}catch{status.textContent='Copy is not available in this browser.';}
-      setTimeout(()=>status.textContent='',2200);
+    checklist.forEach(item => {
+      item.addEventListener('change', updateChecklist);
     });
 
-    // Did You Know
-    const tips=[
-      ['Quello is built around QOTD conversations.','Each server keeps its own configuration, counters, history, and normal logs.'],
-      ['English and Russian QOTDs use separate counters.','Language selection can be configured and QOTDs can also target a specific channel.'],
-      ['Quello can open a discussion thread automatically.','That keeps the question itself clean while giving the community a dedicated place to respond.'],
-      ['Owner tools are intentionally separated.','Administrative controls such as /setup, /logs, /lock, and /maintenance are restricted to the appropriate owners.'],
-      ['The website remembers your setup checklist.','Your progress is stored locally in your browser so you can return later.']
-    ];
-    let tipIndex=0;
-    document.getElementById('nextTip')?.addEventListener('click',()=>{tipIndex=(tipIndex+1)%tips.length;document.getElementById('tipTitle').textContent=tips[tipIndex][0];document.getElementById('tipText').textContent=tips[tipIndex][1];});
+    updateChecklist();
 
-    // Random QOTD
-    const randomQuestions=[
+    const playgroundData = {
+      qotd: [
+        'QOTD',
+        'Create a new Question of the Day.',
+        'Create and publish a QOTD using the configured server settings.',
+        'Configured QOTD role, Bot Owner or Server Owner',
+        '/qotd question:"What should we discuss today?"'
+      ],
+      edit: [
+        'QOTD',
+        'Edit an existing QOTD.',
+        'Change a QOTD by its Discord message ID.',
+        'Configured QOTD role, Bot Owner or Server Owner',
+        '/edit message_id:123456789 question:"New question"'
+      ],
+      delete: [
+        'QOTD',
+        'Delete an existing QOTD.',
+        'Remove a QOTD by its Discord message ID.',
+        'Configured QOTD role, Bot Owner or Server Owner',
+        '/delete message_id:123456789'
+      ],
+      leaderboard: [
+        'COMMUNITY',
+        'View QOTD rankings.',
+        'See Creator and Responder rankings for the current server.',
+        'Available to all users',
+        '/leaderboard'
+      ],
+      history: [
+        'INFO',
+        'Browse QOTD history.',
+        'Explore previously created QOTDs on the current server.',
+        'Available to all users',
+        '/history'
+      ],
+      setup: [
+        'SETUP',
+        'Configure Quello.',
+        'Set the QOTD role, allowed role, channels, and bot language.',
+        'Bot Owner or Server Owner',
+        '/setup'
+      ],
+      logs: [
+        'ADMIN',
+        'Review QOTD logs.',
+        'View and filter normal QOTD logs with pagination.',
+        'Bot Owner or Server Owner',
+        '/logs'
+      ],
+      audit_log: [
+        'OWNER',
+        'Inspect the audit trail.',
+        'View detailed interaction attempts and errors.',
+        'Bot Owner or Server Owner',
+        '/audit_log'
+      ],
+      maintenance: [
+        'OWNER',
+        'Manage maintenance mode.',
+        'Temporarily block new QOTD creation while maintaining the server.',
+        'Bot Owner or Server Owner',
+        '/maintenance enabled:true'
+      ],
+      lock: [
+        'OWNER',
+        'Lock QOTD creation.',
+        'Lock or unlock the creation of new QOTDs.',
+        'Bot Owner or Server Owner',
+        '/lock enabled:true'
+      ]
+    };
+
+    const commandPickerTrigger =
+      document.getElementById('commandPickerTrigger');
+
+    const commandDrawer =
+      document.getElementById('commandDrawer');
+
+    const commandPickerName =
+      document.getElementById('commandPickerName');
+
+    const commandPickerLabel =
+      document.getElementById('commandPickerLabel');
+
+    const commandOptions = Array.from(
+      document.querySelectorAll('.command-option')
+    );
+
+    let selectedCommand = 'qotd';
+
+    function updatePlayground(command = selectedCommand){
+      selectedCommand =
+        playgroundData[command]
+          ? command
+          : 'qotd';
+
+      const d = playgroundData[selectedCommand];
+
+      const playgroundName =
+        document.getElementById('playgroundName');
+
+      const playgroundTag =
+        document.getElementById('playgroundTag');
+
+      const playgroundTitle =
+        document.getElementById('playgroundTitle');
+
+      const playgroundDescription =
+        document.getElementById('playgroundDescription');
+
+      const playgroundAccess =
+        document.getElementById('playgroundAccess');
+
+      const playgroundExample =
+        document.getElementById('playgroundExample');
+
+      if (playgroundName) {
+        playgroundName.textContent = '/' + selectedCommand;
+      }
+
+      if (playgroundTag) {
+        playgroundTag.textContent = d[0];
+      }
+
+      if (playgroundTitle) {
+        playgroundTitle.textContent = d[1];
+      }
+
+      if (playgroundDescription) {
+        playgroundDescription.textContent = d[2];
+      }
+
+      if (playgroundAccess) {
+        playgroundAccess.textContent = d[3];
+      }
+
+      if (playgroundExample) {
+        playgroundExample.textContent = d[4];
+      }
+
+      if (commandPickerName) {
+        commandPickerName.textContent = '/' + selectedCommand;
+      }
+
+      if (commandPickerLabel) {
+        commandPickerLabel.textContent =
+          d[1].replace(/\.$/, '');
+      }
+
+      commandOptions.forEach(option => {
+        const active =
+          option.dataset.command === selectedCommand;
+
+        option.classList.toggle('active', active);
+        option.setAttribute(
+          'aria-selected',
+          String(active)
+        );
+      });
+
+      localStorage.setItem(
+        'quello-playground-used',
+        '1'
+      );
+
+      unlockAchievement('playground');
+    }
+
+    function setCommandDrawer(open){
+      if (!commandDrawer) return;
+
+      commandDrawer.classList.toggle('open', open);
+
+      commandDrawer.setAttribute(
+        'aria-hidden',
+        String(!open)
+      );
+
+      document.body.classList.toggle(
+        'command-drawer-open',
+        open
+      );
+
+      commandPickerTrigger?.setAttribute(
+        'aria-expanded',
+        String(open)
+      );
+
+      if (open) {
+        const activeOption =
+          commandDrawer.querySelector(
+            '.command-option.active'
+          );
+
+        activeOption?.focus();
+      } else {
+        commandPickerTrigger?.focus();
+      }
+    }
+
+    commandPickerTrigger?.addEventListener(
+      'click',
+      event => {
+        event.preventDefault();
+
+        const isOpen =
+          commandDrawer?.classList.contains('open');
+
+        setCommandDrawer(!isOpen);
+      }
+    );
+
+    commandOptions.forEach(option => {
+      option.addEventListener('click', event => {
+        event.preventDefault();
+
+        const command =
+          option.dataset.command;
+
+        if (
+          !command ||
+          !playgroundData[command]
+        ) {
+          return;
+        }
+
+        updatePlayground(command);
+        setCommandDrawer(false);
+      });
+
+      option.addEventListener('keydown', event => {
+        if (
+          event.key === 'Enter' ||
+          event.key === ' '
+        ) {
+          event.preventDefault();
+          option.click();
+        }
+      });
+    });
+
+    commandDrawer
+      ?.querySelectorAll('[data-command-close]')
+      .forEach(element => {
+        element.addEventListener('click', event => {
+          event.preventDefault();
+          setCommandDrawer(false);
+        });
+      });
+
+    commandDrawer
+      ?.querySelector('.command-drawer-panel')
+      ?.addEventListener('click', event => {
+        event.stopPropagation();
+      });
+
+    commandDrawer?.addEventListener('click', event => {
+      if (event.target === commandDrawer) {
+        setCommandDrawer(false);
+      }
+    });
+
+    updatePlayground('qotd');
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+
+      setLanguageMenu(false);
+      setMenu(false);
+
+      if (
+        commandDrawer?.classList.contains('open')
+      ) {
+        setCommandDrawer(false);
+      }
+    });
+
+    let flowStep = 1;
+    let flowLanguage = 'en';
+
+    const flowPanels =
+      Array.from(
+        document.querySelectorAll('.flow-panel')
+      );
+
+    const flowSteps =
+      Array.from(
+        document.querySelectorAll('.flow-step')
+      );
+
+    function updateFlow(){
+      flowPanels.forEach(p => {
+        p.classList.toggle(
+          'active',
+          p.dataset.panel === String(flowStep)
+        );
+      });
+
+      flowSteps.forEach(p => {
+        p.classList.toggle(
+          'active',
+          Number(p.dataset.step) === flowStep
+        );
+      });
+
+      if (flowStep === 3) {
+        const flowQuestion =
+          document.getElementById('flowQuestion');
+
+        const generated =
+          document.getElementById('generatedCommand');
+
+        const q =
+          flowQuestion?.value.trim() ||
+          'What should we discuss today?';
+
+        const safe =
+          q.replace(/"/g, '\\"');
+
+        if (generated) {
+          generated.textContent =
+            `/qotd question:"${safe}" language:${flowLanguage}`;
+        }
+      }
+    }
+
+    document
+      .querySelectorAll('.flow-next')
+      .forEach(b => {
+        b.addEventListener('click', () => {
+          if (flowStep < 3) {
+            flowStep++;
+            updateFlow();
+          }
+        });
+      });
+
+    document
+      .querySelectorAll('.flow-back')
+      .forEach(b => {
+        b.addEventListener('click', () => {
+          if (flowStep > 1) {
+            flowStep--;
+            updateFlow();
+          }
+        });
+      });
+
+    document
+      .querySelectorAll('.flow-language')
+      .forEach(b => {
+        b.addEventListener('click', () => {
+          flowLanguage = b.dataset.flowLang;
+
+          document
+            .querySelectorAll('.flow-language')
+            .forEach(x => {
+              x.classList.toggle(
+                'active',
+                x === b
+              );
+            });
+
+          updateFlow();
+        });
+      });
+
+    document
+      .getElementById('flowQuestion')
+      ?.addEventListener(
+        'input',
+        updateFlow
+      );
+
+    document
+      .getElementById('copyGenerated')
+      ?.addEventListener(
+        'click',
+        async () => {
+          const generated =
+            document.getElementById(
+              'generatedCommand'
+            );
+
+          const status =
+            document.getElementById(
+              'flowCopyStatus'
+            );
+
+          if (!generated || !status) return;
+
+          const text =
+            generated.textContent;
+
+          try {
+            await navigator.clipboard.writeText(
+              text
+            );
+
+            status.textContent = 'Copied!';
+          } catch {
+            status.textContent =
+              'Copy is not available in this browser.';
+          }
+
+          setTimeout(() => {
+            status.textContent = '';
+          }, 2200);
+        }
+      );
+
+    const tips = [
+      [
+        'Quello is built around QOTD conversations.',
+        'Each server keeps its own configuration, counters, history, and normal logs.'
+      ],
+      [
+        'English and Russian QOTDs use separate counters.',
+        'Language selection can be configured and QOTDs can also target a specific channel.'
+      ],
+      [
+        'Quello can open a discussion thread automatically.',
+        'That keeps the question itself clean while giving the community a dedicated place to respond.'
+      ],
+      [
+        'Owner tools are intentionally separated.',
+        'Administrative controls such as /setup, /logs, /lock, and /maintenance are restricted to the appropriate owners.'
+      ],
+      [
+        'The website remembers your setup checklist.',
+        'Your progress is stored locally in your browser so you can return later.'
+      ]
+    ];
+
+    let tipIndex = 0;
+
+    document
+      .getElementById('nextTip')
+      ?.addEventListener('click', () => {
+        tipIndex =
+          (tipIndex + 1) %
+          tips.length;
+
+        const tipTitle =
+          document.getElementById('tipTitle');
+
+        const tipText =
+          document.getElementById('tipText');
+
+        if (tipTitle) {
+          tipTitle.textContent =
+            tips[tipIndex][0];
+        }
+
+        if (tipText) {
+          tipText.textContent =
+            tips[tipIndex][1];
+        }
+      });
+
+    const randomQuestions = [
       'What game would you recommend to everyone?',
       'What is one game you could replay forever?',
       'Which fictional world would you visit for one day?',
@@ -301,46 +811,153 @@ document.addEventListener('DOMContentLoaded', () => {
       'Which game character would make the best teammate?',
       'What game would you introduce to someone who rarely plays games?'
     ];
-    document.getElementById('randomQotd')?.addEventListener('click',()=>{
-      const el=document.getElementById('randomQuestion');
-      if (!el) return;
-      let next=randomQuestions[Math.floor(Math.random()*randomQuestions.length)];
-      if(randomQuestions.length>1 && next===el.textContent) next=randomQuestions[(randomQuestions.indexOf(next)+1)%randomQuestions.length];
-      el.textContent=next;
-      localStorage.setItem('quello-random-used','1');
-      unlockAchievement('random');
-    });
 
-    // Achievements
+    document
+      .getElementById('randomQotd')
+      ?.addEventListener('click', () => {
+        const el =
+          document.getElementById(
+            'randomQuestion'
+          );
+
+        if (!el) return;
+
+        let next =
+          randomQuestions[
+            Math.floor(
+              Math.random() *
+              randomQuestions.length
+            )
+          ];
+
+        if (
+          randomQuestions.length > 1 &&
+          next === el.textContent
+        ) {
+          next =
+            randomQuestions[
+              (
+                randomQuestions.indexOf(next) +
+                1
+              ) % randomQuestions.length
+            ];
+        }
+
+        el.textContent = next;
+
+        localStorage.setItem(
+          'quello-random-used',
+          '1'
+        );
+
+        unlockAchievement('random');
+      });
+
     function unlockAchievement(key){
-      const el=document.querySelector(`.achievement[data-achievement="${key}"]`);
-      if(el){el.classList.add('unlocked');localStorage.setItem(`quello-ach-${key}`,'1');}
-    }
-    ['playground','setup','random','secret'].forEach(key=>{if(localStorage.getItem(`quello-ach-${key}`)==='1')unlockAchievement(key)});
-    document.querySelectorAll('.setup-check').forEach(c=>c.addEventListener('change',()=>{
-      const all=Array.from(document.querySelectorAll('.setup-check')).every(x=>x.checked);
-      if(all)unlockAchievement('setup');
-    }));
+      const el =
+        document.querySelector(
+          `.achievement[data-achievement="${key}"]`
+        );
 
-    // Quello easter egg: click the main avatar 5 times.
-    let avatarClicks=0, avatarTimer=null;
-    const heroAvatar=document.querySelector('.hero-avatar');
-    heroAvatar?.addEventListener('click',()=>{
-      avatarClicks++;
-      clearTimeout(avatarTimer);
-      avatarTimer=setTimeout(()=>avatarClicks=0,1700);
-      if(avatarClicks>=5){
-        avatarClicks=0;
-        const msg=document.getElementById('secretMessage');
-        msg.textContent='✦ You found the Quello secret. Questions bring people together. ✦';
-        unlockAchievement('secret');
-        document.getElementById('easterEgg')?.scrollIntoView({behavior:'smooth',block:'center'});
+      if (el) {
+        el.classList.add('unlocked');
+
+        localStorage.setItem(
+          `quello-ach-${key}`,
+          '1'
+        );
+      }
+    }
+
+    [
+      'playground',
+      'setup',
+      'random',
+      'secret'
+    ].forEach(key => {
+      if (
+        localStorage.getItem(
+          `quello-ach-${key}`
+        ) === '1'
+      ) {
+        unlockAchievement(key);
       }
     });
-    document.getElementById('secretHint')?.addEventListener('click',()=>{
-      document.getElementById('secretMessage').textContent='Hint: the big Quello avatar on the home section has a secret…';
-    });
+
+    document
+      .querySelectorAll('.setup-check')
+      .forEach(c => {
+        c.addEventListener('change', () => {
+          const all =
+            Array.from(
+              document.querySelectorAll(
+                '.setup-check'
+              )
+            ).every(x => x.checked);
+
+          if (all) {
+            unlockAchievement('setup');
+          }
+        });
+      });
+
+    let avatarClicks = 0;
+    let avatarTimer = null;
+
+    const heroAvatar =
+      document.querySelector('.hero-avatar');
+
+    heroAvatar?.addEventListener(
+      'click',
+      () => {
+        avatarClicks++;
+
+        clearTimeout(avatarTimer);
+
+        avatarTimer =
+          setTimeout(() => {
+            avatarClicks = 0;
+          }, 1700);
+
+        if (avatarClicks >= 5) {
+          avatarClicks = 0;
+
+          const msg =
+            document.getElementById(
+              'secretMessage'
+            );
+
+          if (msg) {
+            msg.textContent =
+              '✦ You found the Quello secret. Questions bring people together. ✦';
+          }
+
+          unlockAchievement('secret');
+
+          document
+            .getElementById('easterEgg')
+            ?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+        }
+      }
+    );
+
+    document
+      .getElementById('secretHint')
+      ?.addEventListener('click', () => {
+        const secretMessage =
+          document.getElementById(
+            'secretMessage'
+          );
+
+        if (secretMessage) {
+          secretMessage.textContent =
+            'Hint: the big Quello avatar on the home section has a secret…';
+        }
+      });
 
     applyLanguage(currentLanguage);
-  
+
 });
