@@ -4,16 +4,20 @@ Updated website for Quello.
 
 ## Current site sections
 - Command Explorer with Discord-style embed blocks
+- Interactive Command Playground
+- Step-by-step Build Your QOTD helper
 - Interactive QOTD Preview Builder
 - Quello Setup Guide
 - Permissions overview
 - FAQ
 - Changelog
 - Discord community links
-- English / Russian language switch
+- English / Russian / German / French / Italian language switch
+- Did You Know tips, Random QOTD, achievements, and a Quello easter egg
+- Community Spotlight
 - Terms of Service and Privacy Policy
 
 The site intentionally does not include a Bot Status dashboard, public statistics dashboard, leaderboard dashboard, or QOTD showcase.
 
 
-Latest update: the site now uses the real Quello bot avatar, a slide-out documentation menu, and documents the expanded /leaderboard creator + responder rankings.
+Latest update: the site now combines the Quello avatar, slide-out navigation, interactive command exploration, guided QOTD building, setup progress, community highlights, and hidden extras.
