@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Quello — your Question of the Day bot for creating, managing, and organizing QOTDs and discussions.">
   <title>Quello — Your Question of the Day Bot</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <link rel="icon" type="image/png" href="quello-avatar.png">
   <link rel="apple-touch-icon" href="quello-avatar.png">
 </head>
@@ -136,9 +136,27 @@
         <div class="embed-accent"></div>
         <div class="embed-content">
           <label class="playground-label" for="commandSelect" data-i18n="playground_choose">Choose a command</label>
-          <select id="commandSelect" class="playground-select">
-            <option value="qotd">/qotd</option><option value="edit">/edit</option><option value="delete">/delete</option><option value="leaderboard">/leaderboard</option><option value="history">/history</option><option value="setup">/setup</option><option value="logs">/logs</option><option value="audit_log">/audit_log</option><option value="maintenance">/maintenance</option><option value="lock">/lock</option>
-          </select>
+          <div class="command-picker" id="commandPicker">
+            <button class="command-picker-toggle" id="commandPickerToggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="command-picker-current">/qotd</span>
+              <span class="command-picker-caret" aria-hidden="true">⌄</span>
+            </button>
+            <div class="command-picker-menu" id="commandPickerMenu" role="listbox" aria-label="Choose a command">
+              <button type="button" class="command-picker-option active" data-value="qotd" role="option" aria-selected="true"><span>/qotd</span><small>Question of the Day</small></button>
+              <button type="button" class="command-picker-option" data-value="edit" role="option" aria-selected="false"><span>/edit</span><small>Edit a QOTD</small></button>
+              <button type="button" class="command-picker-option" data-value="delete" role="option" aria-selected="false"><span>/delete</span><small>Delete a QOTD</small></button>
+              <button type="button" class="command-picker-option" data-value="leaderboard" role="option" aria-selected="false"><span>/leaderboard</span><small>View rankings</small></button>
+              <button type="button" class="command-picker-option" data-value="history" role="option" aria-selected="false"><span>/history</span><small>Browse QOTD history</small></button>
+              <button type="button" class="command-picker-option" data-value="setup" role="option" aria-selected="false"><span>/setup</span><small>Configure Quello</small></button>
+              <button type="button" class="command-picker-option" data-value="logs" role="option" aria-selected="false"><span>/logs</span><small>Review QOTD logs</small></button>
+              <button type="button" class="command-picker-option" data-value="audit_log" role="option" aria-selected="false"><span>/audit_log</span><small>Inspect the audit trail</small></button>
+              <button type="button" class="command-picker-option" data-value="maintenance" role="option" aria-selected="false"><span>/maintenance</span><small>Manage maintenance mode</small></button>
+              <button type="button" class="command-picker-option" data-value="lock" role="option" aria-selected="false"><span>/lock</span><small>Lock QOTD creation</small></button>
+            </div>
+            <select id="commandSelect" class="playground-select-native" tabindex="-1" aria-hidden="true">
+              <option value="qotd">/qotd</option><option value="edit">/edit</option><option value="delete">/delete</option><option value="leaderboard">/leaderboard</option><option value="history">/history</option><option value="setup">/setup</option><option value="logs">/logs</option><option value="audit_log">/audit_log</option><option value="maintenance">/maintenance</option><option value="lock">/lock</option>
+            </select>
+          </div>
           <div class="playground-card" id="playgroundCard">
             <div class="command-head"><code id="playgroundName">/qotd</code><span class="command-tag" id="playgroundTag">QOTD</span></div>
             <h3 id="playgroundTitle">Create a new Question of the Day.</h3>

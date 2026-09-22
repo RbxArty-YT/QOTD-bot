@@ -234,6 +234,44 @@
       lock:['OWNER','Lock QOTD creation.','Lock or unlock the creation of new QOTDs.','Bot Owner or Server Owner','/lock enabled:true']
     };
     const commandSelect = document.getElementById('commandSelect');
+    const commandPicker = document.getElementById('commandPicker');
+    const commandPickerToggle = document.getElementById('commandPickerToggle');
+    const commandPickerMenu = document.getElementById('commandPickerMenu');
+    const commandPickerCurrent = commandPicker?.querySelector('.command-picker-current');
+    const commandPickerOptions = Array.from(document.querySelectorAll('.command-picker-option'));
+
+    function setCommandPicker(value){
+      if(!commandSelect) return;
+      commandSelect.value = value;
+      const option = commandPickerOptions.find(item => item.dataset.value === value);
+      if(commandPickerCurrent) commandPickerCurrent.textContent = '/' + value;
+      commandPickerOptions.forEach(item => {
+        const active = item === option;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', String(active));
+      });
+      commandSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function setCommandPickerOpen(open){
+      commandPicker?.classList.toggle('open', open);
+      commandPickerToggle?.setAttribute('aria-expanded', String(open));
+    }
+
+    commandPickerToggle?.addEventListener('click', () => {
+      setCommandPickerOpen(!commandPicker?.classList.contains('open'));
+    });
+    commandPickerOptions.forEach(option => option.addEventListener('click', () => {
+      setCommandPicker(option.dataset.value);
+      setCommandPickerOpen(false);
+    }));
+    document.addEventListener('click', event => {
+      if(commandPicker && !commandPicker.contains(event.target)) setCommandPickerOpen(false);
+    });
+    document.addEventListener('keydown', event => {
+      if(event.key === 'Escape') setCommandPickerOpen(false);
+    });
+
     function updatePlayground(){
       if(!commandSelect) return;
       const d=playgroundData[commandSelect.value]||playgroundData.qotd;
