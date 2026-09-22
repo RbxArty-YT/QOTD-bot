@@ -233,11 +233,11 @@
       maintenance:['OWNER','Manage maintenance mode.','Temporarily block new QOTD creation while maintaining the server.','Bot Owner or Server Owner','/maintenance enabled:true'],
       lock:['OWNER','Lock QOTD creation.','Lock or unlock the creation of new QOTDs.','Bot Owner or Server Owner','/lock enabled:true']
     };
-    let selectedPlaygroundCommand = 'qotd';
-    function updatePlayground(command = selectedPlaygroundCommand){
-      selectedPlaygroundCommand = command;
-      const d=playgroundData[command]||playgroundData.qotd;
-      document.getElementById('playgroundName').textContent='/'+command;
+    const commandSelect = document.getElementById('commandSelect');
+    function updatePlayground(){
+      if(!commandSelect) return;
+      const d=playgroundData[commandSelect.value]||playgroundData.qotd;
+      document.getElementById('playgroundName').textContent='/'+commandSelect.value;
       document.getElementById('playgroundTag').textContent=d[0];
       document.getElementById('playgroundTitle').textContent=d[1];
       document.getElementById('playgroundDescription').textContent=d[2];
@@ -246,36 +246,8 @@
       localStorage.setItem('quello-playground-used','1');
       unlockAchievement('playground');
     }
-    const commandPickerButton = document.getElementById('commandPickerButton');
-    const commandPicker = document.getElementById('commandPicker');
-    const commandPickerValue = document.getElementById('commandPickerValue');
-    const commandPickerOptions = Array.from(document.querySelectorAll('.command-picker-option'));
-    function closeCommandPicker(){
-      if(!commandPicker) return;
-      commandPicker.hidden = true;
-      commandPickerButton?.setAttribute('aria-expanded','false');
-      document.body.classList.remove('command-picker-open');
-    }
-    function openCommandPicker(){
-      if(!commandPicker) return;
-      commandPicker.hidden = false;
-      commandPickerButton?.setAttribute('aria-expanded','true');
-      document.body.classList.add('command-picker-open');
-    }
-    commandPickerButton?.addEventListener('click',()=>{
-      if(commandPicker?.hidden) openCommandPicker(); else closeCommandPicker();
-    });
-    commandPickerOptions.forEach(option=>option.addEventListener('click',()=>{
-      const command = option.dataset.command;
-      if(!command) return;
-      commandPickerOptions.forEach(item=>item.classList.toggle('active', item===option));
-      if(commandPickerValue) commandPickerValue.textContent='/'+command;
-      updatePlayground(command);
-      closeCommandPicker();
-    }));
-    commandPicker?.querySelectorAll('[data-command-picker-close]').forEach(el=>el.addEventListener('click',closeCommandPicker));
-    document.addEventListener('keydown',event=>{ if(event.key==='Escape') closeCommandPicker(); });
-    updatePlayground('qotd');
+    commandSelect?.addEventListener('change',updatePlayground);
+    updatePlayground();
 
     // Build Your QOTD flow
     let flowStep=1, flowLanguage='en';
