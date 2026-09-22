@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 
     const translations = {
       en: {
@@ -33,8 +34,8 @@
     let currentLanguage = localStorage.getItem('quello-site-language-v2') || 'en';
 
     function setLanguageMenu(open){
-      languagePicker.classList.toggle('open', open);
-      languageSwitch.setAttribute('aria-expanded', String(open));
+      languagePicker?.classList.toggle('open', open);
+      languageSwitch?.setAttribute('aria-expanded', String(open));
     }
 
     function applyLanguage(lang){
@@ -54,8 +55,8 @@
         if (value != null) el.placeholder = value;
       });
       const meta = languageMeta[lang];
-      languageCurrentFlag.textContent = meta.flag;
-      languageCurrentCode.textContent = meta.code;
+      if (languageCurrentFlag) languageCurrentFlag.textContent = meta?.flag || '🇬🇧';
+      if (languageCurrentCode) languageCurrentCode.textContent = meta?.code || 'EN';
       languageOptions.forEach(option => {
         const active = option.dataset.language === lang;
         option.classList.toggle('active', active);
@@ -65,13 +66,13 @@
       updatePreview();
     }
 
-    languageSwitch.addEventListener('click', () => setLanguageMenu(!languagePicker.classList.contains('open')));
+    languageSwitch?.addEventListener('click', () => setLanguageMenu(!languagePicker?.classList.contains('open')));
     languageOptions.forEach(option => option.addEventListener('click', () => {
       applyLanguage(option.dataset.language);
       setLanguageMenu(false);
     }));
     document.addEventListener('click', e => {
-      if (!languagePicker.contains(e.target)) setLanguageMenu(false);
+      if (languagePicker && !languagePicker.contains(e.target)) setLanguageMenu(false);
     });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') setLanguageMenu(false);
@@ -83,17 +84,17 @@
     const menuLinks = document.querySelectorAll('.side-menu-links a');
 
     function setMenu(open){
-      sideMenu.classList.toggle('open', open);
-      menuOverlay.classList.toggle('open', open);
-      menuToggle.setAttribute('aria-expanded', String(open));
-      sideMenu.setAttribute('aria-hidden', String(!open));
+      sideMenu?.classList.toggle('open', open);
+      menuOverlay?.classList.toggle('open', open);
+      menuToggle?.setAttribute('aria-expanded', String(open));
+      sideMenu?.setAttribute('aria-hidden', String(!open));
       document.body.classList.toggle('menu-open', open);
     }
-    menuToggle.addEventListener('click', () => setMenu(true));
-    menuClose.addEventListener('click', () => setMenu(false));
-    menuOverlay.addEventListener('click', () => setMenu(false));
+    menuToggle?.addEventListener('click', () => setMenu(true));
+    menuClose?.addEventListener('click', () => setMenu(false));
+    menuOverlay?.addEventListener('click', () => setMenu(false));
     menuLinks.forEach(link => link.addEventListener('click', () => setMenu(false)));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { setMenu(false); setCommandDrawer?.(false); } });
 
     // Highlight the section currently visible on the page.
     const sectionLinks = Array.from(menuLinks).filter(link => link.getAttribute('href')?.startsWith('#'));
@@ -158,6 +159,7 @@
     const copyStatus = document.getElementById('copyStatus');
 
     function updatePreview(){
+      if (!q || !n || !a || !lang || !showAuthor || !count || !previewQuestion || !previewNumber || !previewAuthor || !previewAuthorLine || !previewTitle || !previewThread) return;
       previewQuestion.textContent = q.value.trim() || '—';
       previewNumber.textContent = '#' + (n.value || '1');
       previewAuthor.textContent = a.value.trim() || '—';
@@ -172,10 +174,10 @@
       }
     }
 
-    [q,n,a,lang,showAuthor].forEach(el => el.addEventListener('input', updatePreview));
-    lang.addEventListener('change', updatePreview);
+    [q,n,a,lang,showAuthor].filter(Boolean).forEach(el => el.addEventListener('input', updatePreview));
+    lang?.addEventListener('change', updatePreview);
 
-    document.getElementById('resetPreview').addEventListener('click', () => {
+    document.getElementById('resetPreview')?.addEventListener('click', () => {
       q.value = 'What game would you recommend to everyone?';
       n.value = '42';
       a.value = 'Community Member';
@@ -185,7 +187,7 @@
       updatePreview();
     });
 
-    document.getElementById('copyPreview').addEventListener('click', async () => {
+    document.getElementById('copyPreview')?.addEventListener('click', async () => {
       const title = lang.value === 'ru' ? '💬 ВОПРОС ДНЯ' : '💬 QUESTION OF THE DAY';
       const thread = lang.value === 'ru' ? '🧵 Ветка обсуждения QOTD' : '🧵 QOTD discussion thread';
       const credit = showAuthor.checked && a.value.trim() ? `\n\n${lang.value === 'ru' ? 'Предложил' : 'Suggested by'}: ${a.value.trim()}` : '';
@@ -209,7 +211,7 @@
         state[item.dataset.key] = item.checked;
         if (item.checked) done++;
       });
-      checklistProgress.textContent = `${done} / ${checklist.length}`;
+      if (checklistProgress) checklistProgress.textContent = `${done} / ${checklist.length}`;
       localStorage.setItem(checklistStorageKey, JSON.stringify(state));
     }
     try {
@@ -257,9 +259,11 @@
       flowPanels.forEach(p=>p.classList.toggle('active',p.dataset.panel===String(flowStep)));
       flowSteps.forEach(p=>p.classList.toggle('active',Number(p.dataset.step)===flowStep));
       if(flowStep===3){
-        const q=document.getElementById('flowQuestion').value.trim()||'What should we discuss today?';
+        const flowQuestion=document.getElementById('flowQuestion');
+        const generated=document.getElementById('generatedCommand');
+        const q=flowQuestion?.value.trim()||'What should we discuss today?';
         const safe=q.replace(/"/g,'\\"');
-        document.getElementById('generatedCommand').textContent=`/qotd question:"${safe}" language:${flowLanguage}`;
+        if (generated) generated.textContent=`/qotd question:"${safe}" language:${flowLanguage}`;
       }
     }
     document.querySelectorAll('.flow-next').forEach(b=>b.addEventListener('click',()=>{if(flowStep<3){flowStep++;updateFlow()}}));
@@ -299,6 +303,7 @@
     ];
     document.getElementById('randomQotd')?.addEventListener('click',()=>{
       const el=document.getElementById('randomQuestion');
+      if (!el) return;
       let next=randomQuestions[Math.floor(Math.random()*randomQuestions.length)];
       if(randomQuestions.length>1 && next===el.textContent) next=randomQuestions[(randomQuestions.indexOf(next)+1)%randomQuestions.length];
       el.textContent=next;
@@ -338,3 +343,4 @@
 
     applyLanguage(currentLanguage);
   
+});
